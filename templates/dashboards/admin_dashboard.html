@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+{% block title %}Administration Control Desk - Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <!-- TOP PAGE BRIEF DETAILS HEADER -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-black text-slate-900 tracking-tight">System Control Center</h1>
+        <p class="text-gray-500 mt-1">High-level institutional parameters tracking KPIs and administrative utilities metrics.</p>
+    </div>
+
+    <!-- METRICS CARD MATRIX GRID -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between">
+            <div>
+                <h3 class="text-3xl font-black text-slate-900 tracking-tight">{{ total_students }}</h3>
+                <p class="text-xs font-bold text-gray-400 uppercase mt-1 tracking-wider">Total Students</p>
+            </div>
+            <span class="text-3xl bg-slate-50 p-3 rounded-lg border border-gray-100">👥</span>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between">
+            <div>
+                <h3 class="text-3xl font-black text-slate-900 tracking-tight">{{ total_teachers }}</h3>
+                <p class="text-xs font-bold text-gray-400 uppercase mt-1 tracking-wider">Active Teachers</p>
+            </div>
+            <span class="text-3xl bg-slate-50 p-3 rounded-lg border border-gray-100">👩‍🏫</span>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between">
+            <div>
+                <h3 class="text-3xl font-black text-slate-900 tracking-tight">{{ total_classrooms }}</h3>
+                <p class="text-xs font-bold text-gray-400 uppercase mt-1 tracking-wider">Classrooms</p>
+            </div>
+            <span class="text-3xl bg-slate-50 p-3 rounded-lg border border-gray-100">🏫</span>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between">
+            <div>
+                <h3 class="text-3xl font-black text-slate-900 tracking-tight">{{ total_subjects }}</h3>
+                <p class="text-xs font-bold text-gray-400 uppercase mt-1 tracking-wider">Subjects Taught</p>
+            </div>
+            <span class="text-3xl bg-slate-50 p-3 rounded-lg border border-gray-100">📚</span>
+        </div>
+    </div>
+
+        <!-- INTERACTIVE ANALYTICS DATA MATRIX CHARTS -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        
+        <!-- CHART CARD 1: ENROLLMENT PROFILE DEMOGRAPHICS -->
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
+                <span>📊</span> Classroom Enrollment Distributions
+            </h3>
+            <div class="relative w-full" style="height: 260px;">
+                <canvas id="demographicsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- CHART CARD 2: INSTITUTIONAL REVENUE SUMMARY -->
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
+                <span>💰</span> Tuition Revenue Performance (Paid vs Outstanding Debt)
+            </h3>
+            <div class="relative w-full flex justify-center" style="height: 260px;">
+                <canvas id="financialChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    
+
+
+    <!-- CORE ACTION PANELS SPLIT LAYOUT -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- LEFT PANELS COLUMN: OPERATIONS BOX (2 COLS WIDE) -->
+        <div class="lg:col-span-2 space-y-8">
+            
+            <!-- QUICK ACTIONS CONTROL PANEL CONTAINER -->
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <h3 class="text-lg font-bold text-slate-800 mb-2">⚡ Administration Quick Shortcuts</h3>
+                <p class="text-sm text-gray-400 mb-6">Manage underlying database entries seamlessly:</p>
+                
+                <div class="flex flex-wrap gap-3">
+                      <!-- NEW BROADCST LINK LINK BUTTON -->
+            <a href="{% url 'admin_post_announcement' %}" class="px-4 py-2.5 rounded-lg bg-amber-500 text-white font-bold text-sm hover:bg-amber-600 shadow-sm transition">
+                📣 Broadcast Global Notice
+            </a>
+                    <a href="/admin/users/user/add/" target="_blank" class="px-4 py-2.5 rounded-lg bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-700 shadow-sm transition">
+                        ➕ Register New User
+                    </a>
+                    <a href="/admin/academic/classroom/add/" target="_blank" class="px-4 py-2.5 rounded-lg bg-slate-800 text-white font-bold text-sm hover:bg-slate-700 shadow-sm transition">
+                        ➕ Create Classroom
+                    </a>
+                    <a href="/admin/academic/subject/add/" target="_blank" class="px-4 py-2.5 rounded-lg bg-slate-800 text-white font-bold text-sm hover:bg-slate-700 shadow-sm transition">
+                        ➕ Assign Subject Roster
+                    </a>
+                    <a href="/admin/" target="_blank" class="px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-gray-700 font-bold text-sm hover:bg-gray-50 shadow-sm transition">
+                        🔧 Advanced Django Admin Panel
+                    </a>
+                </div>
+            </div>
+
+            <!-- RECENT ROSTER ATTENDANCE RECORD MATRIX TABLE -->
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                    <h3 class="text-base font-bold text-slate-800">📝 Live Classroom Operations Feed</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-gray-100/50 text-xs font-bold text-gray-500 uppercase border-b border-gray-200 tracking-wider">
+                                <th class="p-4">Date</th>
+                                <th class="p-4">Student Identity</th>
+                                <th class="p-4">Subject Context</th>
+                                <th class="p-4">Marked Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            {% for log in recent_attendance %}
+                                <tr class="hover:bg-gray-50/50 transition">
+                                    <td class="p-4 text-xs font-medium text-gray-500">{{ log.date }}</td>
+                                    <td class="p-4 font-bold text-slate-900">{{ log.student.user.get_full_name|default:log.student.user.username }}</td>
+                                    <td class="p-4 text-gray-600">{{ log.subject.name }}</td>
+                                    <td class="p-4">
+                                        <span class="px-2 py-0.5 text-xs font-bold rounded {% if log.status == 'Present' %}bg-emerald-100 text-emerald-800{% elif log.status == 'Absent' %}bg-rose-100 text-rose-800{% else %}bg-amber-100 text-amber-800{% endif %}">
+                                            {{ log.status }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4" class="p-6 text-center text-gray-400 italic">No historical operations logged yet.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    
+                </div>
+            </div>
+                        <!-- ADMINISTRATIVE FEE MANAGEMENT LEDGER -->
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mt-8">
+                <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+                    <h3 class="text-base font-bold text-slate-800">💳 Institutional Financial Statements Ledger</h3>
+                    <a href="/admin/academic/invoice/add/" target="_blank" class="text-xs bg-indigo-50 border border-indigo-200 text-indigo-700 px-2.5 py-1 rounded font-bold hover:bg-indigo-100 transition">➕ Issue New Invoice</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-gray-100/50 text-xs font-bold text-gray-500 uppercase border-b border-gray-200 tracking-wider">
+                                <th class="p-4">Student</th>
+                                <th class="p-4">Description</th>
+                                <th class="p-4">Balance Outstanding</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            {% for invoice in all_invoices %}
+                                <tr class="hover:bg-gray-50/50 transition">
+                                    <td class="p-4 font-bold text-slate-900">{{ invoice.student.user.get_full_name|default:invoice.student.user.username }}</td>
+                                    <td class="p-4 text-gray-600 text-xs font-medium">{{ invoice.title }}</td>
+                                    <td class="p-4 font-bold {% if invoice.balance_outstanding > 0 %}text-rose-600{% else %}text-emerald-600{% endif %}">
+                                        ${{ invoice.balance_outstanding }}
+                                    </td>
+                                    <td class="p-4">
+                                        <span class="px-2 py-0.5 text-[10px] font-bold rounded {% if invoice.status == 'Paid' %}bg-emerald-100 text-emerald-800{% elif invoice.status == 'Partially_Paid' %}bg-amber-100 text-amber-800{% else %}bg-rose-100 text-rose-800{% endif %}">
+                                            {{ invoice.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        {% if invoice.status != 'Paid' %}
+                                            <a href="{% url 'academic:admin_record_payment' invoice.id %}" class="inline-block bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm transition">
+                                                💸 Collect Payment
+                                            </a>
+                                        {% else %}
+                                            <span class="text-xs text-gray-400 font-semibold italic">Saddled / Paid</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="5" class="p-6 text-center text-gray-400 italic">No transactional billing statements tracked in the system index yet.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+        
+
+        <!-- RIGHT PANEL COLUMN: SYSTEM DATA EXPORTS (1 COL WIDE) -->
+        <div class="space-y-6">
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <h3 class="text-lg font-bold text-slate-800 mb-2">📊 Data Extraction Engine</h3>
+                <p class="text-sm text-gray-400 mb-6">Compile live system parameters directly to Excel compatible spreadsheets:</p>
+                
+                <div class="space-y-3">
+                    <a href="{% url 'report_students' %}" class="flex items-center justify-between w-full p-4 rounded-xl border border-emerald-200 bg-emerald-50/40 text-emerald-900 font-bold text-sm hover:bg-emerald-50 shadow-sm transition">
+                        <span>📥 Download Student Directory</span>
+                        <span class="text-xs bg-emerald-600 text-white px-2 py-0.5 rounded font-mono">.CSV</span>
+                    </a>
+                    <a href="{% url 'report_balances' %}" class="flex items-center justify-between w-full p-4 rounded-xl border border-purple-200 bg-purple-50/40 text-purple-900 font-bold text-sm hover:bg-purple-50 shadow-sm transition">
+                        <span>📥 Download Fee Balance Ledger</span>
+                        <span class="text-xs bg-purple-600 text-white px-2 py-0.5 rounded font-mono">.CSV</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Load the Chart.js core CDN directly from safe source -->
+<!-- Fixed CDN: Imported the official Chart.js library path correctly -->
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Safe data extraction parsing rows sent from Django backend
+        const classroomLabels = {{ classroom_labels|safe }};
+        const studentCounts = {{ classroom_student_counts|safe }};
+        const financialData = {{ financial_metrics|safe }};
+
+        // 1. INITIALIZE DEMOGRAPHICS BAR GRAPH
+        const ctxDemo = document.getElementById('demographicsChart').getContext('2d');
+        new Chart(ctxDemo, {
+            type: 'bar',
+            data: {
+                labels: classroomLabels,
+                datasets: [{
+                    label: 'Enrolled Students',
+                    data: studentCounts,
+                    backgroundColor: 'rgba(79, 70, 229, 0.85)', // Indigo accent
+                    borderColor: 'rgb(79, 70, 229)',
+                    borderWidth: 1,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { 
+                        beginAtZero: true, 
+                        ticks: { stepSize: 1 } 
+                    }
+                }
+            }
+        });
+
+        // 2. INITIALIZE FINANCIAL PERFORMANCE DONUT CHART
+        const ctxFin = document.getElementById('financialChart').getContext('2d');
+        new Chart(ctxFin, {
+            type: 'doughnut',
+            data: {
+                labels: ['Total Collected Paid', 'Outstanding Balances Debt'],
+                datasets: [{
+                    data: financialData,
+                    backgroundColor: [
+                        'rgba(16, 185, 129, 0.85)', // Green Success
+                        'rgba(239, 68, 68, 0.85)'   // Rose Danger
+                    ],
+                    borderWidth: 2,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    });
+</script>
+<script src="https://jsdelivr.net"></script>
+ 
+
+{% endblock %}

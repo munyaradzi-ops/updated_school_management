@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Post Announcement - {{ subject.classroom.name }}</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 40px; max-width: 600px;">
+
+    <h2>📣 Broadcast New Classroom Announcement</h2>
+    <h3>Target Audience: Students & Parents of <strong>{{ subject.classroom.name }}</strong></h3>
+    <p>Subject Context: {{ subject.name }}</p>
+
+    <hr><br>
+
+    <form method="post">
+        {% csrf_token %}
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: bold; display: block; margin-bottom: 5px;">Notice Title:</label>
+            <input type="text" name="title" placeholder="e.g., Upcoming Field Trip Details" required 
+                   style="width: 100%; padding: 8px; box-sizing: border-box;">
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: bold; display: block; margin-bottom: 5px;">Message Content:</label>
+            <textarea name="content" rows="6" placeholder="Write your full message details here..." required 
+                      style="width: 100%; padding: 8px; box-sizing: border-box; resize: vertical;"></textarea>
+        </div>
+
+        <br>
+        <button type="submit" style="background: #f39c12; color: white; padding: 10px 20px; border: none; font-weight: bold; cursor: pointer; border-radius: 4px;">
+            🚀 Publish & Broadcast Notice
+        </button>
+        <a href="{% url 'teacher_dashboard' %}" style="margin-left: 15px; color: #555; text-decoration: none;">Cancel</a>
+    </form>
+
+</body>
+</html>

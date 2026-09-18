@@ -1,0 +1,20 @@
+<h2>📋 Create New Assessment</h2>
+<h3>Subject: {{ subject.name }}</h3>
+
+<form method="post">
+    {% csrf_token %}
+    <p><label>Name:</label><br><input type="text" name="name" placeholder="e.g., Midterm Exam" required></p>
+    <p><label>Type:</label><br>
+        <select name="assessment_type">
+            <option value="Assignment">Assignment</option>
+            <option value="Quiz">Quiz</option>
+            <option value="Midterm">Midterm Exam</option>
+            <option value="Final">Final Exam</option>
+        </select>
+    </p>
+    <p><label>Max Possible Marks:</label><br><input type="number" name="max_marks" value="100" min="1" required></p>
+    <p><label>Date:</label><br><input type="date" name="date_issued" required></p>
+    
+    <button type="submit" style="background: blue; color: white; padding: 8px 16px; border: none;">Create & Enter Marks</button>
+    <a href="{% url 'teacher_dashboard' %}" style="margin-left: 10px;">Back</a>
+</form>

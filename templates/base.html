@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}School Management System{% endblock %}</title>
+    <!-- Tailwind Engine CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://jsdelivr.net"></script>
+     <script src="https://cloudflare.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <div class="min-h-screen flex flex-col md:flex-row">
+        <!-- SIDEBAR CONTAINER -->
+        <aside class="w-full md:w-64 bg-slate-900 text-slate-100 flex-shrink-0 flex flex-col justify-between p-6">
+            <div>
+                <div class="flex items-center space-x-3 mb-8">
+                    <span class="text-2xl">🏛️</span>
+                    <h1 class="text-xl font-bold tracking-tight">EduNexus Core</h1>
+                </div>
+                
+                <!-- USER CONTEXT PROFILE CARD -->
+                <div class="bg-slate-800 p-4 rounded-lg mb-6 border border-slate-700">
+                    <p class="text-xs uppercase text-slate-400 font-semibold tracking-wider">Authenticated as</p>
+                    <h3 class="font-bold text-slate-200 mt-1 truncate">{{ request.user.get_full_name|default:request.user.username }}</h3>
+                    <span class="inline-block mt-2 px-2 py-0.5 text-xs font-semibold rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 uppercase">
+                        {{ request.user.role }}
+                    </span>
+                </div>
+
+                <nav class="space-y-1">
+                    <a href="{% url 'dashboard_home' %}" class="flex items-center space-x-3 px-3 py-2.5 rounded-md bg-slate-800 text-white font-medium transition">
+                        <span>📊</span> <span>Dashboard</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="pt-6 border-t border-slate-800">
+                <a href="{% url 'logout' %}" class="flex items-center space-x-3 px-3 py-2.5 rounded-md text-slate-400 hover:bg-rose-500/10 hover:text-rose-400 font-medium transition">
+                    <span>🚪</span> <span>Sign Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- MAIN WINDOW CANVAS -->
+        <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+            <!-- TOAST BANNER INTERCEPT MESSAGES -->
+            {% if messages %}
+                <div class="mb-6 space-y-2">
+                    {% for msg in messages %}
+                        <div class="p-4 rounded-lg border {% if msg.tags == 'success' %}bg-emerald-50 border-emerald-200 text-emerald-800{% else %}bg-amber-50 border-amber-200 text-amber-800{% endif %} flex items-center space-x-2 shadow-sm animate-fade-in">
+                            <span>✨</span> <p class="text-sm font-medium">{{ msg }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- CONTAINER EXPANSION CONTENT OVERRIDE -->
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Teacher Portal - Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <div class="mb-8">
+        <h1 class="text-3xl font-black text-slate-900 tracking-tight">Teacher Workspace Portal</h1>
+        <p class="text-gray-500 mt-1">Direct classroom management metrics and tracking registries dashboard panels.</p>
+    </div>
+
+    <!-- MAIN TWO-COLUMN LAYOUT STRUCTURE -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- LEFT PANELS: SUBJECTS DIRECTORY LISTING (2 COLS WIDE) -->
+        <div class="lg:col-span-2 space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                    <h3 class="text-lg font-bold text-slate-800">Your Active Assigned Courses</h3>
+                </div>
+                
+                <div class="divide-y divide-gray-100">
+                    {% for subject in subjects %}
+                        <div class="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-gray-50 transition">
+                            <div>
+                                <h4 class="text-xl font-bold text-slate-900">{{ subject.name }}</h4>
+                                <div class="flex items-center space-x-4 mt-1 text-sm text-gray-500">
+                                    <span class="flex items-center">🏫 Class: <strong class="ml-1 text-slate-700">{{ subject.classroom.name }}</strong></span>
+                                    <span class="flex items-center">🔑 Code: <strong class="ml-1 text-slate-700">{{ subject.code }}</strong></span>
+                                </div>
+                            </div>
+                            <!-- ACTION BUTTON ARRAYS -->
+                            <div class="flex flex-wrap gap-2">
+                                <a href="{% url 'academic:take_attendance' subject.id %}" class="px-4 py-2 text-xs font-bold rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 shadow-sm transition">
+                                    📝 Attendance
+                                </a>
+                                <a href="{% url 'academic:create_assessment' subject.id %}" class="px-4 py-2 text-xs font-bold rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm transition">
+                                    ➕ Add Grades
+                                </a>
+                                <a href="{% url 'academic:post_announcement' subject.id %}" class="px-4 py-2 text-xs font-bold rounded-lg bg-amber-500 text-white hover:bg-amber-600 shadow-sm transition">
+                                    📣 Post Notice
+                                </a>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="p-10 text-center text-gray-500">
+                            <span class="text-3xl block mb-2">📥</span>
+                            No subjects assigned. Please contact the administrative staff room.
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL: BROADCAST LOG FEED (1 COL WIDE) -->
+        <div class="space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                    <h3 class="text-lg font-bold text-slate-800">Recent Broadcaster Feed</h3>
+                </div>
+                <div class="p-6 space-y-4">
+                           {% for note in announcements %}
+                        <div class="p-4 rounded-lg bg-amber-50/50 border border-amber-200/60 relative">
+                            <span class="absolute top-4 right-4 text-xs font-medium text-gray-400">{{ note.date_posted|date:"d M" }}</span>
+                            <h4 class="font-bold text-amber-900 pr-12">📌 {{ note.title }}</h4>
+                            <p class="text-sm text-slate-700 mt-2 leading-relaxed">{{ note.content }}</p>
+                            <p class="text-[10px] text-gray-400 mt-2 font-medium">By: {{ note.author.get_full_name|default:note.author.username }}</p>
+                        </div>
+                    {% empty %}
+                        <p class="text-sm text-gray-400 text-center py-4">No announcement bulletins posted yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

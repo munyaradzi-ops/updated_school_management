@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block title %}Student Hub - Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <!-- TOP BRIEF DETAILS PROFILE BAR -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6 border-b border-gray-200">
+        <div>
+            <h1 class="text-3xl font-black text-slate-900 tracking-tight">Student Academic Center</h1>
+            <p class="text-gray-500 mt-1">
+                Classroom: <strong class="text-slate-800">{% if classroom %}{{ classroom.name }}{% else %}<span class="text-rose-500">Unassigned</span>{% endif %}</strong> 
+                | Roll No: <strong class="text-slate-800">#{{ student_profile.roll_number }}</strong>
+            </p>
+        </div>
+        
+        <!-- ATTENDANCE HIGHLIGHT CARD -->
+        <div class="bg-white px-6 py-3 rounded-xl border border-gray-200 shadow-sm text-center sm:text-right">
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Attendance Rate</span>
+            <h3 class="text-2xl font-black {% if attendance_percentage >= 85 or attendance_percentage == 'No logs recorded yet' %}text-emerald-600{% else %}text-amber-500{% endif %} mt-0.5">
+                {{ attendance_percentage }}{% if attendance_percentage != "No logs recorded yet" %}%{% endif %}
+            </h3>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD HUB SECTIONS GRID -->
+    <div class="space-y-8">
+        
+        <!-- TOP CONDENSED ROW: ANNOUNCEMENTS & SUBJECTS -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- ANNOUNCEMENT SYSTEM ALERT BOX (2 COLS WIDE) -->
+            <div class="lg:col-span-2 bg-amber-50/40 rounded-xl border border-amber-200 p-6">
+                <h3 class="text-lg font-bold text-amber-900 mb-4 flex items-center gap-2"><span>🔔</span> Institutional Noticeboard</h3>
+                <div class="space-y-4">
+                           {% for note in announcements %}
+                        <div class="p-4 rounded-lg bg-amber-50/50 border border-amber-200/60 relative">
+                            <span class="absolute top-4 right-4 text-xs font-medium text-gray-400">{{ note.date_posted|date:"d M" }}</span>
+                            <h4 class="font-bold text-amber-900 pr-12">📌 {{ note.title }}</h4>
+                            <p class="text-sm text-slate-700 mt-2 leading-relaxed">{{ note.content }}</p>
+                            <p class="text-[10px] text-gray-400 mt-2 font-medium">By: {{ note.author.get_full_name|default:note.author.username }}</p>
+                        </div>
+                    {% empty %}
+                        <p class="text-sm text-amber-800/70 italic text-center py-4">No active bulletin notices broadcasted.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- SUBJECT CARDS SIDE-BAR (1 COL WIDE) -->
+            <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+                <h3 class="text-lg font-bold text-slate-800 mb-4">📚 Registered Subjects</h3>
+                <div class="space-y-3">
+                    {% for subject in subjects %}
+                        <div class="p-3 bg-gray-50 rounded-lg border border-gray-100">
+                            <h4 class="font-bold text-slate-900 text-sm">{{ subject.name }}</h4>
+                            <p class="text-xs text-gray-400 mt-0.5">Instructor: {{ subject.teacher.user.get_full_name|default:"TBD" }}</p>
+                        </div>
+                    {% empty %}
+                        <p class="text-xs text-gray-400 italic text-center py-4">No active course profiles found.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- TRANSCRIPT GRADES SYSTEM PROFILE SHEET -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                <h3 class="text-lg font-bold text-slate-800">📊 Graded Transcript Report</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-gray-100/50 text-xs font-bold text-gray-500 uppercase border-b border-gray-200 tracking-wider">
+                            <th class="p-4">Subject</th>
+                            <th class="p-4">Assessment Profile</th>
+                            <th class="p-4">Category</th>
+                            <th class="p-4">Marks Assigned</th>
+                            <th class="p-4">Feedback Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        {% for grade in grades %}
+                            <tr class="hover:bg-gray-50/50 transition">
+                                <td class="p-4 font-bold text-slate-900">{{ grade.assessment.subject.name }}</td>
+                                <td class="p-4 text-gray-600">{{ grade.assessment.name }}</td>
+                                <td class="p-4 text-xs font-semibold text-gray-400">{{ grade.assessment.get_assessment_type_display }}</td>
+                                <td class="p-4 font-bold text-indigo-600">{{ grade.marks_obtained }} <span class="text-gray-400 font-normal">/ {{ grade.assessment.max_marks }}</span></td>
+                                <td class="p-4 text-xs text-gray-500 italic">{{ grade.remarks|default:"—" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="5" class="p-6 text-center text-gray-400 italic">No evaluated data logs available yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- FINANCIAL INVOICES MODULE -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                <h3 class="text-lg font-bold text-slate-800">💳 Accounts Statements & Fees Statement</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-gray-100/50 text-xs font-bold text-gray-500 uppercase border-b border-gray-200 tracking-wider">
+                            <th class="p-4">Invoice Title</th>
+                            <th class="p-4">Due Date</th>
+                            <th class="p-4">Total Due</th>
+                            <th class="p-4">Amount Paid</th>
+                            <th class="p-4">Outstanding Balance</th>
+                            <th class="p-4">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        {% for invoice in invoices %}
+                            <tr class="hover:bg-gray-50/50 transition">
+                                <td class="p-4 font-bold text-slate-900">{{ invoice.title }}</td>
+                                <td class="p-4 text-xs text-gray-500 font-medium">{{ invoice.due_date }}</td>
+                                <td class="p-4 text-gray-600">${{ invoice.amount_due }}</td>
+                                <td class="p-4 text-emerald-600 font-medium">${{ invoice.amount_paid }}</td>
+                                <td class="p-4 font-bold {% if invoice.balance_outstanding > 0 %}text-rose-600{% else %}text-emerald-600{% endif %}">${{ invoice.balance_outstanding }}</td>
+                                <td class="p-4">
+                                    <span class="px-2 py-0.5 text-xs font-bold rounded {% if invoice.status == 'Paid' %}bg-emerald-100 text-emerald-800{% elif invoice.status == 'Partially_Paid' %}bg-amber-100 text-amber-800{% else %}bg-rose-100 text-rose-800{% endif %}">
+                                        {{ invoice.get_status_display }}
+                                    </span>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="6" class="p-6 text-center text-gray-400 italic">No transactional rows logged.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
