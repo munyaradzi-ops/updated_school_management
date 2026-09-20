@@ -1,7 +1,106 @@
-<h2>School Management System - Login</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign In</button>
-</form>
- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - School Management System</title>
+    <!-- Tailwind Engine CDN -->
+    <script src="https://tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 flex min-h-screen items-center justify-center p-4 sm:p-6 lg:p-8 antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- BACKGROUND POLYGON DECORATIONS -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-emerald-600 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- MAIN LOGIN CARD -->
+    <div class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-indigo-500/10">
+        
+        <!-- CARD BRANDING HEADER -->
+        <div class="bg-slate-950 p-8 text-center text-white border-b border-gray-800">
+            <div class="inline-flex items-center justify-center w-14 h-14 bg-indigo-600/10 rounded-xl border border-indigo-500/20 text-3xl mb-4 animate-bounce">
+                🏛️
+            </div>
+            <h2 class="text-2xl font-black tracking-tight text-white">EduNexus Management System</h2>
+            <p class="text-slate-400 text-sm mt-1.5 font-medium">Welcome back! Access your secure portal desk.</p>
+        </div>
+
+        <!-- FORM INTERACTIVE ACTIONS VIEW -->
+        <form method="post" class="p-8 space-y-6">
+            {% csrf_token %}
+
+            <!-- DYNAMIC DJANGO FORM INJECTION COMPONENT -->
+            <!-- Tailwind CSS Global Overrides target custom inputs dynamically -->
+            <div class="space-y-4 class-form-custom text-sm font-medium text-gray-700">
+                {% if form.non_field_errors %}
+                    <div class="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg text-xs font-semibold">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="flex flex-col space-y-1.5">
+                        <label for="{{ field.id_for_label }}" class="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                            {{ field.label }}
+                        </label>
+                        
+                        <!-- Custom CSS Injection targeting raw form inputs -->
+                        <div class="relative rounded-lg shadow-sm">
+                            {{ field }}
+                        </div>
+
+                        {% if field.errors %}
+                            <p class="text-xs font-medium text-rose-600 mt-1">
+                                {{ field.errors.as_text }}
+                            </p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- COMPLIANCE OPTION BOX -->
+            <div class="flex items-center justify-between text-xs font-semibold text-gray-500">
+                <label class="flex items-center space-x-2 cursor-pointer select-none">
+                    <input type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500/20 h-4 w-4">
+                    <span>Keep me logged in</span>
+                </label>
+                <a href="/admin/password_reset/" target="_blank" class="text-indigo-600 hover:text-indigo-700 hover:underline transition">Forgot Password?</a>
+            </div>
+
+            <!-- ACTION FORM SUBMISSION KEY -->
+            <button type="submit" class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-md text-sm font-black text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-150 transform hover:-translate-y-0.5 active:translate-y-0">
+                🔑 Sign In & Authenticate
+            </button>
+        </form>
+
+        <!-- FOOTER DISCLOSURE CONTAINER -->
+        <div class="px-8 py-4 bg-gray-50 border-t border-gray-100 text-center">
+            <p class="text-xs text-gray-400 font-medium">Authorized system terminals use only. Tracking active.</p>
+        </div>
+    </div>
+
+    <!-- UTILITY CSS FORCING INJECTED DJANGO FORM CLASSES TO ALIGN WITH TAILWIND -->
+    <style>
+        .class-form-custom input {
+            width: 100%;
+            padding: 0.65rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+            outline: none;
+            transition: all 150ms ease;
+            font-size: 0.875rem;
+            background-color: #ffffff;
+            color: #0f172a;
+        }
+        .class-form-custom input:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+    </style>
+
+</body>
+</html>
