@@ -27,6 +27,10 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 # Restricts request access matching specific live domains; defaults to all patterns on Railway
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-a0fb5.up.railway.app',
+]
+
 
 # --- APPLICATION DEFINITION ---
 
