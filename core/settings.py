@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     # Custom Application Services
-    'users.apps.UsersConfig',
-    'academic.apps.AcademicConfig',
+    'users', 
+    'academic',
 ]
 
 MIDDLEWARE = [
